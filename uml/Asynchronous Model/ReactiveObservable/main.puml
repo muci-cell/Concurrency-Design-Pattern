@@ -1,0 +1,22 @@
+@startuml
+' 其实和oop中的观察者设计模式很像
+actor "User" as user
+' 存储所有观察者，并负责在数据更新时通知它们。
+entity "Observable" as observable
+entity "Observer 1" as observer1
+entity "Observer 2" as observer2
+
+' 将观察者（即回调函数）添加到观察者列表中
+user -> observable : subscribe(observer1)
+user -> observable : subscribe(observer2)
+' 每当数据更新时，会遍历观察者列表并逐一通知它们。
+user -> observable : emit("Hello, Reactive!")
+
+observable -> observer1 : onNext("Hello, Reactive!")
+observable -> observer2 : onNext("Hello, Reactive!")
+
+user -> observable : emit("Next data in the stream!")
+observable -> observer1 : onNext("Next data in the stream!")
+observable -> observer2 : onNext("Next data in the stream!")
+@enduml
+

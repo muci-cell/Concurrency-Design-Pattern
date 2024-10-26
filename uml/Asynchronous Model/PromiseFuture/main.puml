@@ -1,0 +1,24 @@
+@startuml
+' 单次异步任务（如网络请求）
+' 在获取结果时会阻塞，通常单次触发
+' 最常见的异步模型
+actor 主线程
+participant async_future_promise
+participant query_data
+
+主线程 -> async_future_promise: 调用 async_future_promise()
+async_future_promise -> query_data: 启动线程，执行 query_data
+async_future_promise -> 主线程: 等待 result.get() 数据
+async_future_promise -> 主线程: 等待 result2.get() 数据
+
+query_data -> query_data: Sleep(1000) 等待
+query_data -> query_data: prom.set_value("hello")
+
+async_future_promise -> 主线程: 输出结果 "hello"
+
+query_data -> query_data: Sleep(1000) 等待
+query_data -> query_data: prom2.set_value(100)
+
+async_future_promise -> 主线程: 输出结果 "100"
+主线程 -> 主线程: 结束程序
+@enduml
